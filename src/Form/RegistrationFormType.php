@@ -21,13 +21,10 @@ class RegistrationFormType extends AbstractType
                 'attr' => ['placeholder' => 'Enter your username']
             ])
 
-            ->add(
-                'email',
-                EmailType::class,
-                [
-                    'attr' => ['placeholder' => 'Enter your email']
-                ]
-            )
+            ->add('email', EmailType::class, [
+                'attr' => ['placeholder' => 'Enter your email']
+            ])
+            
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
