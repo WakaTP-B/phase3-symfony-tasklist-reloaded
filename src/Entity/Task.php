@@ -14,12 +14,20 @@ class Task
     #[ORM\Column]
     private ?int $id = null;
 
+    // Titre
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
+    // Status
     #[ORM\Column(enumType: TaskStatus::class)]
     private ?TaskStatus $status = null;
 
+    // Priority
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Priority $priority = null;
+
+    // IsPinned
     #[ORM\Column]
     private ?bool $isPinned = null;
 
@@ -29,6 +37,7 @@ class Task
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     private ?Folder $Folder = null;
+
 
     public function getId(): ?int
     {
@@ -92,6 +101,16 @@ class Task
     {
         $this->Folder = $Folder;
 
+        return $this;
+    }
+    public function getPriority(): ?Priority
+    {
+        return $this->priority;
+    }
+
+    public function setPriority(?Priority $priority): static
+    {
+        $this->priority = $priority;
         return $this;
     }
 }

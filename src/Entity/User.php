@@ -52,10 +52,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Folder::class, mappedBy: 'User')]
     private Collection $folders;
 
+    /**
+     * @var Collection<int, Priority>
+     */
+    #[ORM\OneToMany(targetEntity: Priority::class, mappedBy: 'User')]
+    private Collection $priorities;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
         $this->folders = new ArrayCollection();
+        $this->priorities = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -202,5 +209,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Priority>
+     */
+    public function getPriorities(): Collection
+    {
+        return $this->priorities;
     }
 }
