@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\TaskRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Enum\TaskStatus;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 class Task
@@ -16,8 +17,8 @@ class Task
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $status = null;
+    #[ORM\Column(enumType: TaskStatus::class)]
+    private ?TaskStatus $status = null;
 
     #[ORM\Column]
     private ?bool $isPinned = null;
@@ -46,12 +47,12 @@ class Task
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getStatus(): ?TaskStatus
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): static
+    public function setStatus(TaskStatus $status): static
     {
         $this->status = $status;
 
