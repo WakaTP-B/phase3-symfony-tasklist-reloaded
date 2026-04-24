@@ -51,6 +51,30 @@ final class TaskController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}/done', name: 'app_task_done', methods: ['POST'])]
+    public function done(
+        Request $request,
+        Task $task,
+        EntityManagerInterface $entityManager,
+        #[CurrentUser] User $user
+    ): Response {
+        if ($task->getUser() !== $user) {
+            throw $this->createAccessDeniedException('Accès refusé.');
+        }
+
+        if ($task->getStatus() === TaskStatus::PENDING) {
+            $task->setStatus(TaskStatus::COMPLETED);
+        } elseif ($task->getStatus() === TaskStatus::COMPLETED) {
+            $task->setStatus(TaskStatus::PENDING);
+        }
+
+        $entityManager->flush();
+
+        $request->getSession()->set('just_toggled_task_id', $task->getId());
+
+        return $this->redirectToRoute('app_dashboard');
+    }
+
     // #[Route('/{id}', name: 'app_task_show', methods: ['GET'])]
     // public function show(Task $task, #[CurrentUser] User $user): Response
     // {

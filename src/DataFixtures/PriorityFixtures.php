@@ -11,9 +11,9 @@ class PriorityFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $defaults = [
-            ['name' => 'Urgent', 'color' => '#FCA5A5'],
-            ['name' => 'Important', 'color' => '#FED7AA'],
             ['name' => 'Normal', 'color' => '#BFDBFE'],
+            ['name' => 'Important', 'color' => '#FED7AA'],
+            ['name' => 'Urgent', 'color' => '#FCA5A5'],
         ];
 
         foreach ($defaults as $data) {
