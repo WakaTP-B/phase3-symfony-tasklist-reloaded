@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+{% block title %}Gérer les priorités
+{% endblock %}
+
+{% block body %}
+	<div class="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+		<div
+			class="w-lg bg-white rounded-2xl shadow-lg p-8 relative">
+
+			{# Fermer #}
+			<a href="{{ path('app_dashboard') }}" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl">×</a>
+
+			{# Titre #}
+			<h1 class="text-xl font-bold text-gray-900">Gérer les priorités</h1>
+			<p class="text-sm text-gray-500 mb-6">Ajoutez ou supprimez des niveaux de priorité personnalisés</p>
+
+			{# Formulaire #}
+			<form method="post" action="{{ path('app_priority_index') }}" class="flex gap-2 mb-6">
+				<input type="text" name="name" placeholder="Ex: Très urgent" class="flex-1 px-3 py-2 bg-gray-100 border border-gray-200 rounded-lg text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
+				<button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg hover:bg-gray-800">+</button>
+			</form>
+
+			{# Priorités #}
+			<p class="text-sm font-medium text-gray-700 mb-3">Priorités existantes</p>
+			<ul class="space-y-2">
+				{% for priority in priorities %}
+					<li class="flex items-center justify-between px-4 py-3 border border-gray-200 rounded-lg text-sm text-gray-800">
+						<div class="flex items-center gap-2">
+
+							<span class="w-3 h-3 rounded-full inline-block" style="background-color: {{ priority.color }}"></span>
+							{{ priority.name }}
+						</div>
+
+						{% if priority.isDefault %}
+							<span class="text-xs text-gray-400">par défaut</span>
+						{% endif %}
+					</li>
+				{% endfor %}
+			</ul>
+
+		</div>
+	</div>
+{% endblock %}
