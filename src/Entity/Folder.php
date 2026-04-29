@@ -18,8 +18,12 @@ class Folder
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 50)]
     private ?string $name = null;
+
+    // Color hex (7 characters)
+    #[ORM\Column(length: 7)]
+    private ?string $color = null;
 
     #[ORM\ManyToOne(inversedBy: 'folders')]
     #[ORM\JoinColumn(nullable: false)]
@@ -50,6 +54,17 @@ class Folder
     {
         $this->name = $name;
 
+        return $this;
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(string $color): static
+    {
+        $this->color = $color;
         return $this;
     }
 
