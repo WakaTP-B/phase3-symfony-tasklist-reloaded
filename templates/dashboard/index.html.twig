@@ -14,7 +14,7 @@
 		<div
 			class="w-64 bg-gray-50 text-gray-800 shrink-0 flex flex-col p-4 gap-6 border-r border-gray-200">
 			{# All tasks #}
-			<a href="{{ path('app_dashboard') }}" class="flex items-center gap-2 px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-800 text-sm font-medium shadow-sm">
+			<a href="{{ path('app_dashboard') }}" class="flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium shadow-sm {{ activeFolderId == 0 ? 'bg-gray-100 border-gray-300' : 'bg-white border-gray-200 text-gray-800' }}">
 				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="16" height="16">
 					<path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/>
 				</svg>
@@ -28,7 +28,7 @@
 					<ul class="space-y-1">
 						{% for folder in folders %}
 							<li>
-								<a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-100 text-sm text-gray-700">
+								<a href="{{ path('app_dashboard', {folder: folder.id}) }}" class="flex items-center justify-between px-3 py-2 rounded-lg text-sm text-gray-700 {{ activeFolderId == folder.id ? 'bg-gray-200 font-semibold' : 'hover:bg-gray-100' }}">
 									<div class="flex items-center gap-2">
 										<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" fill="{{ folder.color }}" width="16" height="16">
 											<path d="M19.5 21a3 3 0 0 0 3-3v-4.5a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3V18a3 3 0 0 0 3 3h15ZM1.5 10.146V6a3 3 0 0 1 3-3h5.379a2.25 2.25 0 0 1 1.59.659l2.122 2.121c.14.141.331.22.53.22H19.5a3 3 0 0 1 3 3v1.146A4.483 4.483 0 0 0 19.5 9h-15a4.483 4.483 0 0 0-3 1.146Z"/>
@@ -111,22 +111,24 @@
 				{# Filtre Statut #}
 				<div class="flex items-center gap-2">
 					<span class="text-sm text-gray-600">Statut</span>
-					<select class="text-sm border border-gray-200 rounded-lg pl-3 pr-8 py-1.5 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-gray-300 appearance-none bg-no-repeat bg-right" style="background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E&quot;); background-position: right 0.5rem center; background-size: 1.25em;">
-						<option>Tous</option>
-						<option>En cours</option>
-						<option>Terminée</option>
-						<option>Archivée</option>
+					<select onchange="applyFilter('status', this.value)" class="text-sm border border-gray-200 rounded-lg pl-3 pr-8 py-1.5 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-gray-300 appearance-none bg-no-repeat bg-right" style="background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E&quot;); background-position: right 0.5rem center; background-size: 1.25em;">
+						<option value="" {{ activeStatus is null ? 'selected' : '' }}>Tous</option>
+						<option value="En cours" {{ activeStatus == 'En cours' ? 'selected' : '' }}>En cours</option>
+						<option value="Terminée" {{ activeStatus == 'Terminée' ? 'selected' : '' }}>Terminée</option>
+						<option value="Archivée" {{ activeStatus == 'Archivée' ? 'selected' : '' }}>Archivée</option>
 					</select>
 				</div>
 
 				{# Filtre Priorité #}
 				<div class="flex items-center gap-2">
 					<span class="text-sm text-gray-600">Priorité</span>
-					<select class="text-sm border border-gray-200 rounded-lg pl-3 pr-8 py-1.5 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-gray-300 appearance-none bg-no-repeat bg-right" style="background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E&quot;); background-position: right 0.5rem center; background-size: 1.25em;">
-						<option>Toutes</option>
-						<option>Urgent</option>
-						<option>Important</option>
-						<option>Normal</option>
+					<select onchange="applyFilter('priority', this.value)" class="text-sm border border-gray-200 rounded-lg pl-3 pr-8 py-1.5 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-gray-300 appearance-none bg-no-repeat bg-right" style="background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E&quot;); background-position: right 0.5rem center; background-size: 1.25em;">
+						<option value="0" {{ activePriority == 0 ? 'selected' : '' }}>Toutes</option>
+						{% for priority in priorities %}
+							<option value="{{ priority.id }}" {{ activePriority == priority.id ? 'selected' : '' }}>
+								{{ priority.name }}
+							</option>
+						{% endfor %}
 					</select>
 				</div>
 
@@ -194,4 +196,18 @@
 		</div>
 	</div>
 
+	 <script>
+	function applyFilter(param, value) {
+	    const url = new URL(window.location.href);
+	
+	    if (value === '' || value === '0') {
+	        url.searchParams.delete(param);
+	    } else {
+	        url.searchParams.set(param, value);
+	    }
+	
+	    window.location.href = url.toString();
+	}
+	</script>
+	
 {% endblock %}

@@ -18,9 +18,13 @@ class TaskRepository extends ServiceEntityRepository
         parent::__construct($registry, Task::class);
     }
 
-    public function findTasksSorted(User $user): array
-    {
-        return $this->createQueryBuilder('t')
+    public function findTasksSorted(
+        User $user,
+        ?TaskStatus $status = null,
+        ?int $folderId = null,
+        ?int $priorityId = null
+    ): array {
+        $qb = $this->createQueryBuilder('t')
             ->addSelect(
                 'CASE
                     WHEN t.status = :pending   THEN 0
@@ -36,8 +40,23 @@ class TaskRepository extends ServiceEntityRepository
             ->setParameter('archived',  TaskStatus::ARCHIVED)
             ->orderBy('t.isPinned', 'DESC')
             ->addOrderBy('statusOrder', 'ASC')
-            ->addOrderBy('t.id', 'DESC')
-            ->getQuery()
-            ->getResult();
+            ->addOrderBy('t.id', 'DESC');
+
+        if ($status !== null) {
+            $qb->andWhere('t.status = :status')
+                ->setParameter('status', $status);
+        }
+
+        if ($folderId !== null) {
+            $qb->andWhere('t.Folder = :folder')
+                ->setParameter('folder', $folderId);
+        }
+
+        if ($priorityId !== null) {
+            $qb->andWhere('t.priority = :priority')
+                ->setParameter('priority', $priorityId);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 }
