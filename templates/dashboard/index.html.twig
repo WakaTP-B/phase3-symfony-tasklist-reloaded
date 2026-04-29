@@ -26,19 +26,21 @@
 				<div>
 					<p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 px-3">Dossiers</p>
 					<ul class="space-y-1">
-						<li>
-							<a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-100 text-sm text-gray-700">
-								<div
-									class="flex items-center gap-2">
-									{# Icône dossier vert plein #}
-									<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" fill="#22c55e" width="16" height="16">
-										<path d="M19.5 21a3 3 0 0 0 3-3v-4.5a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3V18a3 3 0 0 0 3 3h15ZM1.5 10.146V6a3 3 0 0 1 3-3h5.379a2.25 2.25 0 0 1 1.59.659l2.122 2.121c.14.141.331.22.53.22H19.5a3 3 0 0 1 3 3v1.146A4.483 4.483 0 0 0 19.5 9h-15a4.483 4.483 0 0 0-3 1.146Z"/>
-									</svg>
-									Maison
-								</div>
-								<span class="text-xs text-gray-400">1</span>
-							</a>
-						</li>
+						{% for folder in folders %}
+							<li>
+								<a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-100 text-sm text-gray-700">
+									<div class="flex items-center gap-2">
+										<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" fill="{{ folder.color }}" width="16" height="16">
+											<path d="M19.5 21a3 3 0 0 0 3-3v-4.5a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3V18a3 3 0 0 0 3 3h15ZM1.5 10.146V6a3 3 0 0 1 3-3h5.379a2.25 2.25 0 0 1 1.59.659l2.122 2.121c.14.141.331.22.53.22H19.5a3 3 0 0 1 3 3v1.146A4.483 4.483 0 0 0 19.5 9h-15a4.483 4.483 0 0 0-3 1.146Z"/>
+										</svg>
+										{{ folder.name }}
+									</div>
+									<span class="text-xs text-gray-400">{{ folder.tasks|length }}</span>
+								</a>
+							</li>
+						{% else %}
+							<li class="px-3 py-2 text-sm text-gray-400">Aucun dossier</li>
+						{% endfor %}
 					</ul>
 				</div>
 			</div>
@@ -68,7 +70,7 @@
 					</a>
 
 					{# New Folder #}
-					<a href="" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">
+					<a href="{{ path('app_folder_new') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="16" height="16">
 							<path stroke-linecap="round" stroke-linejoin="round" d="M12 10.5v6m3-3H9m4.06-7.19-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z"/>
 						</svg>

@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Nouveau dossier
+{% endblock %}
+
+
+{% block body %}
+	<div class="fixed inset-0 flex items-center justify-center bg-black/30 z-50">
+		<div class="bg-white rounded-xl border border-black/10 shadow-md wl p-6">
+
+			{# En-tête #}
+			<div class="flex justify-between items-start mb-1">
+				<h2 class="text-base font-semibold">Créer un dossier</h2>
+				<a href="{{ path('app_dashboard') }}" class="text-gray-400 hover:text-gray-600">✕</a>
+			</div>
+			<p class="text-sm text-gray-400 mb-4">Organisez vos tâches par projet</p>
+
+			{# Formulaire #}
+			{{ form_start(form, {action: path('app_folder_new'), method: 'POST'}) }}
+
+			{# Champ nom #}
+			<div class="mb-4">
+				<label class="block text-sm font-medium mb-1">Nom du dossier</label>
+				{{ form_widget(form.name, {attr: {class: 'w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black'}}) }}
+			</div>
+
+			{# Sélecteur de couleur #}
+			<div class="mb-6">
+				<label class="block text-sm font-medium mb-2">Couleur</label>
+				<div class="grid grid-cols-8 gap-2">
+					{% set colors = [
+                        '#EF4444', '#F97316', '#EAB308', '#84CC16',
+                        '#22C55E', '#10B981', '#14B8A6', '#06B6D4',
+                        '#3B82F6', '#6366F1', '#8B5CF6', '#A855F7',
+                        '#EC4899', '#F43F5E', '#64748B', '#000000'
+                    ] %}
+
+					{% for color in colors %}
+						<label class="cursor-pointer">
+							<input type="radio" name="color" value="{{ color }}" class="sr-only peer" {% if loop.first %} checked {% endif %}>
+							<span class="block w-8 h-8 rounded-full peer-checked:ring-2 peer-checked:ring-offset-2 peer-checked:ring-black" style="background-color: {{ color }}"></span>
+						</label>
+					{% endfor %}
+				</div>
+			</div>
+
+			{# Boutons #}
+			<div class="flex justify-end gap-2">
+				<a href="{{ path('app_dashboard') }}" class="px-4 py-2 text-sm rounded-lg border border-gray-200 hover:bg-gray-50">
+					Annuler
+				</a>
+				<button type="submit" class="px-4 py-2 text-sm rounded-lg bg-black text-white hover:bg-gray-800">
+					Créer
+				</button>
+			</div>
+
+			{{ form_end(form) }}
+		</div>
+	</div>
+{% endblock %}
